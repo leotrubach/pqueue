@@ -12,7 +12,7 @@ setup(
     name='pqueue',
     version='0.1',
     packages=['pqueue'],
-    install_requires=['six'],
+    install_requires=['six', 'nose'],
     include_package_data=True,
     license='BSD License',  # example license
     description='Robust file-based persistent queue in python',
