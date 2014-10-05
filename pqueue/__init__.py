@@ -1,1 +1,1 @@
-__author__ = 'Leo'
+from .pqueue import PersistentQueue, QueueError
