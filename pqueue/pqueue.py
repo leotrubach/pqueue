@@ -13,6 +13,8 @@ from collections import namedtuple, deque
 
 log = logging.getLogger(__name__)
 
+from serializers import CompressedJSONSerializer, JSONSerializer
+
 
 class SafeQueueQueue(object):
     """Create a queue object with a given maximum size.
@@ -653,6 +655,14 @@ class PersistentQueue(ThreadsafeQueueBase):
             self._writer.close()
 
 
+class CompressedPersistentQueue(PersistentQueue):
+    SERIALIZER = CompressedJSONSerializer()
+
+
+class JSONPersistentQueue(PersistentQueue):
+    SERIALIZER = JSONSerializer()
+
+
 def main():
     import time
     import shutil
@@ -664,9 +674,17 @@ def main():
     def mk_persistent_queue(basedir):
         return PersistentQueue(basedir)
 
+    def mk_comp_persistent_queue(basedir):
+        return CompressedPersistentQueue(basedir)
+
+    def mk_json_persistent_queue(basedir):
+        return JSONPersistentQueue(basedir)
+
     queues = [
-        ("JournaledPersistentQueue", mk_journaled_queue),
+        ("JSONPersistentQueue", mk_json_persistent_queue),
         ("PersistentQueue", mk_persistent_queue),
+        ("CompressedPersistentQueue", mk_comp_persistent_queue),
+        ("JournaledPersistentQueue", mk_journaled_queue),
     ]
 
     tests = [
