@@ -1,1 +1,3 @@
-from .pqueue import PersistentQueue, QueueError
+from .pqueue import (
+    PersistentQueue, QueueError, JSONPersistentQueue,
+    CompressedPersistentQueue)
