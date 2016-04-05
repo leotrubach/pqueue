@@ -14,6 +14,9 @@ from collections import namedtuple, deque
 
 log = logging.getLogger(__name__)
 
+MAX_FILE_SIZE = 1024 * 1024
+
+
 from serializers import CompressedJSONSerializer, JSONSerializer
 
 
@@ -409,7 +412,7 @@ class JournaledPersistentQueue(object):
 
         data_checksum_len = unpack_uint(header[1:]) + self.CHECKSUM_LEN
         end = start + self.HEADER_LEN + data_checksum_len
-        data_checksum = self._file.read(min(data_checksum_len, sys.maxint))
+        data_checksum = self._file.read(min(data_checksum_len, MAX_FILE_SIZE))
         if len(data_checksum) != data_checksum_len:
             return PQRecord(self, start, end, record_type, None,
                             "record truncated")
@@ -544,7 +547,7 @@ class PersistentQueue(ThreadsafeQueueBase):
     DATAFILE_PREFIX = "pq-data-"
     DATAFILE_TEMPLATE = DATAFILE_PREFIX + "%016x"
 
-    def __init__(self, basedir, max_filesize=1024 * 1024,
+    def __init__(self, basedir, max_filesize=MAX_FILE_SIZE,
                  queue_class=JournaledPersistentQueue):
         # Because our ``qsize()`` method doesn't return the total size of the
         # queue, setting a ``maxsize`` value here would be redundant.
