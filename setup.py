@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='pqueue',
-    version='0.1',
+    version='0.1.1',
     packages=['pqueue'],
     install_requires=['six', 'nose'],
     include_package_data=True,

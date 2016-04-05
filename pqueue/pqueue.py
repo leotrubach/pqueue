@@ -6,6 +6,7 @@ import glob
 import zlib
 import pickle
 import struct
+import sys
 import logging
 import tempfile
 from time import time as _time
@@ -408,7 +409,7 @@ class JournaledPersistentQueue(object):
 
         data_checksum_len = unpack_uint(header[1:]) + self.CHECKSUM_LEN
         end = start + self.HEADER_LEN + data_checksum_len
-        data_checksum = self._file.read(data_checksum_len)
+        data_checksum = self._file.read(min(data_checksum_len, sys.maxint))
         if len(data_checksum) != data_checksum_len:
             return PQRecord(self, start, end, record_type, None,
                             "record truncated")
